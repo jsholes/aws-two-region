@@ -1,0 +1,44 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListStateBuckets",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetBucketVersioning"
+      ],
+      "Resource": [
+        "arn:aws:s3:::netplat-tfstate-<ACCOUNT_ID>-us-east-1",
+        "arn:aws:s3:::netplat-tfstate-<ACCOUNT_ID>-us-east-2"
+      ]
+    },
+    {
+      "Sid": "ReadWriteStateObjects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::netplat-tfstate-<ACCOUNT_ID>-us-east-1/prod/*",
+        "arn:aws:s3:::netplat-tfstate-<ACCOUNT_ID>-us-east-2/prod/*"
+      ]
+    },
+    {
+      "Sid": "StateLocking",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:<ACCOUNT_ID>:table/netplat-tfstate-locks",
+        "arn:aws:dynamodb:us-east-2:<ACCOUNT_ID>:table/netplat-tfstate-locks"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+# Provider plugins and module cache - rebuilt by terraform init
+**/.terraform/*
+
+# State. Remote backend holds the real thing; these are local strays,
+# and any that show up contain plaintext secrets.
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Saved plans - binary, and they embed variable values including secrets
+*.tfplan
+tfplan
+*.tfplan.*
+
+# Crash dumps - contain the full request/response, credentials included
+crash.log
+crash.*.log
+
+# CLI config - may hold registry tokens
+.terraformrc
+terraform.rc
+
+# Override files (local-only experiments)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Anything auto-loaded is likely machine-specific or sensitive.
+# terraform.tfvars is deliberately NOT ignored here - see README.
+*.auto.tfvars
+*.auto.tfvars.json
+*.tfvars.secret
+secrets.tfvars
+
+# VM-Series bootstrap config and keys - never commit these
+**/bootstrap.xml
+*.pem
+*.key
+
+
+
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# NOTE: .terraform.lock.hcl is intentionally tracked. Commit it so every
+# apply and every CI run uses identical provider versions and checksums.

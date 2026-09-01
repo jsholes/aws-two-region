@@ -1,0 +1,38 @@
+title = "aws-network-platform"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "aws-account-id"
+description = "AWS account ID in a tracked file"
+regex = '''\b\d{12}\b'''
+
+  [rules.allowlist]
+  description = "AWS-owned service account IDs that legitimately appear in bucket policies and docs"
+  regexes = [
+    '''127311923021''',
+    '''033677994240''',
+    '''156460612806''',
+    '''797873946194''',
+    '''054676820928''',
+    '''582318560864''',
+  ]
+
+[[rules]]
+id = "panw-auth-key"
+description = "Panorama VM auth key or VM-Series authcode assigned a literal"
+regex = '''(vm_auth_key|vm_series_auth_codes)\s*=\s*"[^"]+"'''
+
+[allowlist]
+description = "Placeholders, examples, and the scanner's own pattern files"
+regexes = [
+  '''<ACCOUNT_ID>''',
+  '''CHANGEME''',
+]
+paths = [
+  '''\.example$''',
+  '''^scripts/audit-public\.sh$''',
+  '''^\.gitleaks\.toml$''',
+  '''^docs/publishing\.md$''',
+]

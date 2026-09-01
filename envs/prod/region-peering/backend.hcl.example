@@ -1,0 +1,6 @@
+# terraform init -backend-config=backend.hcl
+bucket         = "netplat-tfstate-<ACCOUNT_ID>-us-east-1"
+key            = "prod/global/peering/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "netplat-tfstate-locks"
+encrypt        = true

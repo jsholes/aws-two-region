@@ -1,0 +1,11 @@
+requester_region = "us-east-1"
+accepter_region  = "us-east-2"
+
+# us-east-1 firewalls inspect cross-region traffic in both directions.
+# Keep this aligned with propagate_into_peering_route_table:
+#   us-east-1 -> false
+#   us-east-2 -> true
+inspection_side = "requester"
+
+state_bucket_requester = "netplat-tfstate-CHANGEME-us-east-1"
+state_bucket_accepter  = "netplat-tfstate-CHANGEME-us-east-2"
