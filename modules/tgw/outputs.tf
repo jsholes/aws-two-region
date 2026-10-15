@@ -37,3 +37,8 @@ output "peering_route_table_id" {
   description = "Route table associated with the cross-region peering attachment."
   value       = aws_ec2_transit_gateway_route_table.this["peering"].id
 }
+
+output "hybrid_route_table_id" {
+  description = "Route table associated with Direct Connect gateway and VPN attachments."
+  value       = aws_ec2_transit_gateway_route_table.this["hybrid"].id
+}

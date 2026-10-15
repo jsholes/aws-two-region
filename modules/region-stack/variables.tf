@@ -9,7 +9,7 @@ variable "availability_zones" {
 }
 
 variable "region_supernet" {
-  description = "Summary prefix covering every VPC in this region (e.g. 10.101.0.0/16)."
+  description = "Summary prefix covering every VPC in this region (e.g. 10.100.0.0/16)."
   type        = string
 }
 
@@ -141,6 +141,34 @@ variable "ingress_listeners" {
     targets               = optional(list(string), [])
   }))
   default = {}
+}
+
+############################################################
+# Hybrid / Direct Connect
+############################################################
+
+variable "dx_gateway_id" {
+  description = "Direct Connect gateway to associate this region's TGW with. Empty string disables the hybrid attachment entirely."
+  type        = string
+  default     = ""
+}
+
+variable "dx_create_association" {
+  description = "Create the DX gateway association. False when it is owned by another account or already exists."
+  type        = bool
+  default     = true
+}
+
+variable "dx_allowed_prefixes" {
+  description = "Prefixes advertised from AWS to on-premises. Empty falls back to this region's supernet, which is the summarized answer you usually want."
+  type        = list(string)
+  default     = []
+}
+
+variable "dx_inspect_inbound" {
+  description = "Send on-premises to AWS traffic through the inspection VPC."
+  type        = bool
+  default     = true
 }
 
 variable "enable_spoke_s3_gateway_endpoints" {

@@ -106,17 +106,31 @@ fi
 ############################################################
 # 5. History - .gitignore does nothing about what is already committed
 ############################################################
-SQUASH_HINT="If this repo has never been pushed, collapse it into one clean commit:
+# One root commit is the common case right after the .example split: amending
+# rewrites the only commit there is, so the orphan dance is unnecessary.
+COMMIT_COUNT=$(git rev-list --all --count 2>/dev/null || echo 0)
+
+if [ "$COMMIT_COUNT" -le 1 ]; then
+  SQUASH_HINT="this repo has a single commit, so untracking and amending rewrites all of it:
+
+  git rm --cached <the paths listed above>
+  git commit --amend --no-edit
+  git reflog expire --expire=now --all && git gc --prune=now
+  ./scripts/audit-public.sh"
+else
+  SQUASH_HINT="If this repo has never been pushed, collapse it into one clean commit:
 
   git checkout --orphan public-main
+  git rm --cached <any real-value files still tracked>
   git add -A
   git commit -m \"Initial public release\"
   git branch -D main 2>/dev/null || git branch -D master
   git branch -m main
-  ./scripts/audit-public.sh
+  git reflog expire --expire=now --all && git gc --prune=now
 
 If it HAS already been pushed, squashing is not enough - use git filter-repo
 and rotate anything that was exposed."
+fi
 
 if [ "$STAGED" -eq 0 ]; then
   HIST=$(git log --all -p --no-color 2>/dev/null \

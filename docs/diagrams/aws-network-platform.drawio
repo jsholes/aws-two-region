@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="app.diagrams.net" type="device" agent="terraform-scaffold">
+  <diagram name="1 · Two-Region Overview">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1740" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="onprem" value="On-Premises&#10;CH1 / NY4 customer routers&#10;BGP over transit VIF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F4F4;strokeColor=#4A4A4A;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="dxgw" value="Direct Connect Gateway&#10;allowed_prefixes: static, summarized" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="50" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rega" value="us-east-1   10.100.0.0/16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FC;strokeColor=#5A6B7B;fontSize=14;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;dashed=1;dashPattern=6 4;fontStyle=1;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="780" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="neta" value="Internet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="165" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="inga" value="Ingress VPC  /22&#10;Internet-facing NLB&#10;GWLB endpoints + IGW ingress routing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6EC;strokeColor=#ED7100;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="290" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="inspa" value="Inspection VPC  /22&#10;GWLB + VM-Series ASG per AZ&#10;GWLB endpoints + NAT egress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="290" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="tgwa" value="Transit Gateway   ASN 64512&#10;spoke · inspection · ingress · peering · hybrid&#10;(inspects cross-region)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="460" width="360" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="spka" value="Spoke VPCs   /22 each   ·   default route 0.0.0.0/0 to the TGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FC;strokeColor=#5A6B7B;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;dashed=1;dashPattern=6 4;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="90" y="620" width="720" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sa0" value="spoke-01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="96" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sa1" value="spoke-02" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="216" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sa2" value="spoke-03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="336" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sa3" value="spoke-04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="456" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sa4" value="spoke-05" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="576" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sa5" value="spoke-06" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="696" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="regb" value="us-east-2   10.200.0.0/16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FC;strokeColor=#5A6B7B;fontSize=14;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;dashed=1;dashPattern=6 4;fontStyle=1;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="900" y="230" width="780" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="netb" value="Internet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="165" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="ingb" value="Ingress VPC  /22&#10;Internet-facing NLB&#10;GWLB endpoints + IGW ingress routing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6EC;strokeColor=#ED7100;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="290" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="inspb" value="Inspection VPC  /22&#10;GWLB + VM-Series ASG per AZ&#10;GWLB endpoints + NAT egress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="290" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="tgwb" value="Transit Gateway   ASN 64513&#10;spoke · inspection · ingress · peering · hybrid&#10;(bypasses to peering)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="460" width="360" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="spkb" value="Spoke VPCs   /22 each   ·   default route 0.0.0.0/0 to the TGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F9FC;strokeColor=#5A6B7B;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;dashed=1;dashPattern=6 4;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="930" y="620" width="720" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sb0" value="spoke-01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="936" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sb1" value="spoke-02" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1056" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sb2" value="spoke-03" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1176" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sb3" value="spoke-04" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1296" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sb4" value="spoke-05" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1416" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="sb5" value="spoke-06" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1536" y="660" width="108" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="n1" value="Every spoke default route points at the firewall. Prefixes that must NOT be propagated into the spoke table:&#10;on-premises (hybrid domain) and the remote region (peering domain) — either would be more specific than 0.0.0.0/0 and would route around inspection." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#B8A02A;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="780" width="1620" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="transit VIF" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="onprem" target="dxgw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="association&#10;hybrid RT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="dxgw" target="tgwa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="association&#10;hybrid RT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="dxgw" target="tgwb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="TGW peering  ·  inspected once, in us-east-1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#8C4FFF;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="tgwa" target="tgwb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5a" value="0.0.0.0/0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="tgwa" target="inspa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="tgwa" target="inga">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="spka" target="tgwa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8a" value="ingress" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="neta" target="inga">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9a" value="egress via NAT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#248814;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="inspa" target="neta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5b" value="0.0.0.0/0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="tgwb" target="inspb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="tgwb" target="ingb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="spkb" target="tgwb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8b" value="ingress" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="netb" target="ingb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9b" value="egress via NAT" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#248814;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="inspb" target="netb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2 · Region Detail and Traffic Paths">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1560" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="inet" value="Internet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="30" width="240" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="ingvpc" value="Ingress landing zone VPC   10.100.4.0/22" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6EC;strokeColor=#ED7100;fontSize=12;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;dashed=1;dashPattern=6 4;fontStyle=1;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="600" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="igw" value="IGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="170" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="edgert" value="IGW ingress route table&#10;NLB subnet prefix → GWLBE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#B8A02A;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="250" y="165" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gwlbe_i" value="GWLB endpoint&#10;(per AZ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="265" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nlb" value="Network Load Balancer&#10;target_type = ip, AZ = all" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6EC;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="330" y="265" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ingtgw" value="TGW attachment subnets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="350" width="480" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="ivpc" value="Inspection VPC   10.100.0.0/22" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=12;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;dashed=1;dashPattern=6 4;fontStyle=1;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="900" y="120" width="600" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="itgw" value="TGW attachment subnets&#10;RT: 0.0.0.0/0 → AZ-local GWLBE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="170" width="520" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="gwlbe_e" value="GWLB endpoints  (one per AZ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="250" width="520" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gwlb" value="Gateway Load Balancer&#10;GENEVE 6081 · cross-zone off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="320" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="vms" value="VM-Series ASG per AZ&#10;mgmt-interface-swap: eth0 = data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="320" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nat" value="NAT gateway per AZ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="415" width="250" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="iigw" value="IGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="415" width="250" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gwrt" value="GWLBE RT: supernets → TGW, 0.0.0.0/0 → NAT   ·   Public RT: supernets → GWLBE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#B8A02A;fontSize=10;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="490" width="520" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="tgw" value="Transit Gateway&#10;appliance mode on the inspection attachment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="640" width="400" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="spoke" value="Spoke VPC   workload subnets&#10;RT: 0.0.0.0/0 → TGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="180" y="790" width="320" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="dx" value="Direct Connect gateway&#10;hybrid RT: supernet → inspection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="790" width="340" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="1  inbound" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="inet" target="igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" value="2  edge route" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="igw" target="gwlbe_i">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="3  GENEVE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="gwlbe_i" target="gwlb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gwlb" target="vms">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p5" value="4  post-inspection" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gwlbe_i" target="nlb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p6" value="5  to spoke target" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="nlb" target="ingtgw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#ED7100;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="ingtgw" target="tgw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p8" value="east-west + egress&#10;0.0.0.0/0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="spoke" target="tgw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#147EBA;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="tgw" target="itgw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="itgw" target="gwlbe_e">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#C7131F;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gwlbe_e" target="gwlb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p12" value="egress" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#248814;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gwlbe_e" target="nat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#248814;fontSize=10;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="nat" target="iigw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p14" value="on-prem → inspection" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#1F6FEB;fontSize=10;fontFamily=Helvetica;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="dx" target="tgw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="3 · Transit Gateway Route Domains">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="780" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="a_spoke" value="spoke-01 … spoke-06" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F7FE;strokeColor=#147EBA;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="260" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="rt_spoke" value="spoke route table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_spoke" value="STATIC  0.0.0.0/0 → inspection attachment&#10;PROP    ingress VPC prefix&#10;&#10;Nothing else. Any propagated prefix here&#10;is more specific than the default and&#10;skips the firewall." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="a_insp" value="inspection VPC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="60" width="260" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="rt_insp" value="inspection route table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="170" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_insp" value="PROP    all spoke prefixes&#10;PROP    ingress VPC prefix&#10;PROP    on-premises (via DXGW)&#10;STATIC  remote supernet → peering&#10;            (inspecting region only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="330" y="220" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ing" value="ingress VPC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6EC;strokeColor=#ED7100;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="60" width="260" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="rt_ing" value="ingress route table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="170" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_ing" value="PROP    all spoke prefixes&#10;STATIC  0.0.0.0/0 → inspection&#10;&#10;Lets landing-zone workloads egress&#10;through the same firewall as a spoke." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="620" y="220" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="a_peer" value="TGW peering attachment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="60" width="260" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="rt_peer" value="peering route table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="170" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_peer" value="Inspecting region:&#10;  STATIC local supernet → inspection&#10;&#10;Bypass region:&#10;  PROP  local prefixes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="910" y="220" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="a_hyb" value="Direct Connect gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#1F6FEB;fontSize=11;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="60" width="260" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="rt_hyb" value="hybrid route table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F0FF;strokeColor=#8C4FFF;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="170" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="b_hyb" value="STATIC  local supernet → inspection&#10;&#10;On-prem prefixes are propagated OUT of&#10;here into the inspection table, never&#10;into the spoke table." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8C8C8C;fontSize=10;fontFamily=Helvetica;align=left;verticalAlign=top;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="220" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="PROP = aws_ec2_transit_gateway_route_table_propagation      STATIC = aws_ec2_transit_gateway_route&#10;&#10;default_route_table_association and default_route_table_propagation are both disabled on the TGW. That switches off the implicit&#10;behaviour only — every attachment above is placed in its domain explicitly, which is what makes the routing auditable." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#B8A02A;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="1420" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="warn" value="The single rule that holds the whole design together: the spoke table contains exactly one route out, and it points at the firewall.&#10;Every other domain exists so that some prefix — ingress, remote region, on-premises — can be reachable without being propagated into it." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F2;strokeColor=#C7131F;fontSize=11;fontFamily=Helvetica;align=left;verticalAlign=middle;arcSize=8;spacingLeft=6;spacingRight=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="610" width="1420" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e_spoke" value="associated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=9;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="a_spoke" target="rt_spoke">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_insp" value="associated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=9;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="a_insp" target="rt_insp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ing" value="associated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=9;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="a_ing" target="rt_ing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_peer" value="associated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=9;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="a_peer" target="rt_peer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_hyb" value="associated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;jettySize=auto;orthogonalLoop=1;strokeColor=#3A3A3A;fontSize=9;fontFamily=Helvetica;strokeWidth=1;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="a_hyb" target="rt_hyb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -185,3 +185,32 @@ module "spoke" {
 
   tags = var.tags
 }
+
+############################################################
+# Hybrid connectivity
+#
+# Optional. The DX gateway itself is a global resource created outside
+# this module - both regions associate with the same one.
+############################################################
+
+module "dxgw" {
+  source = "../dxgw-attachment"
+  count  = var.dx_gateway_id != "" ? 1 : 0
+
+  dx_gateway_id      = var.dx_gateway_id
+  transit_gateway_id = module.tgw.transit_gateway_id
+  create_association = var.dx_create_association
+
+  allowed_prefixes = length(var.dx_allowed_prefixes) > 0 ? var.dx_allowed_prefixes : [var.region_supernet]
+
+  hybrid_route_table_id     = module.tgw.hybrid_route_table_id
+  inspection_route_table_id = module.tgw.inspection_route_table_id
+  inspection_attachment_id  = module.inspection_vpc.transit_gateway_attachment_id
+
+  inspect_inbound = var.dx_inspect_inbound
+
+  # Only this region's supernet. The other region has its own association
+  # to the same DX gateway, so on-premises reaches it directly rather than
+  # hairpinning through here.
+  inspected_prefixes = [var.region_supernet]
+}

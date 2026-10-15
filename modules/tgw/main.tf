@@ -10,6 +10,12 @@
 #   inspection - the centralized firewall / GWLB VPC attachment
 #   ingress    - the internet ingress landing zone VPC attachment
 #   peering    - the cross-region TGW peering attachment
+#   hybrid     - Direct Connect gateway and VPN attachments
+#
+# peering and hybrid exist so that off-cloud and cross-region prefixes
+# never get propagated into the spoke table. A propagated prefix there
+# would be more specific than the spoke default route and would send
+# traffic around the firewall instead of through it.
 ############################################################
 
 resource "aws_ec2_transit_gateway" "this" {
@@ -27,7 +33,7 @@ resource "aws_ec2_transit_gateway" "this" {
 }
 
 locals {
-  route_tables = ["spoke", "inspection", "ingress", "peering"]
+  route_tables = ["spoke", "inspection", "ingress", "peering", "hybrid"]
 }
 
 resource "aws_ec2_transit_gateway_route_table" "this" {

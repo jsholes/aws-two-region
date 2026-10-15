@@ -31,7 +31,7 @@ variable "requester_transit_gateway_id" {
 }
 
 variable "requester_supernet" {
-  description = "Summary prefix covering every VPC in the requester region (e.g. 10.101.0.0/16)."
+  description = "Summary prefix covering every VPC in the requester region (e.g. 10.100.0.0/16)."
   type        = string
 }
 
@@ -70,7 +70,7 @@ variable "accepter_region" {
 }
 
 variable "accepter_supernet" {
-  description = "Summary prefix covering every VPC in the accepter region (e.g. 10.102.0.0/16)."
+  description = "Summary prefix covering every VPC in the accepter region (e.g. 10.200.0.0/16)."
   type        = string
 }
 

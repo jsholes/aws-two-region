@@ -72,3 +72,13 @@ output "log_archive_bucket_name" {
   description = "Centralized log bucket for this region."
   value       = module.log_archive.bucket_name
 }
+
+output "hybrid_route_table_id" {
+  description = "TGW route table holding the Direct Connect gateway attachment."
+  value       = module.tgw.hybrid_route_table_id
+}
+
+output "dx_gateway_attachment_id" {
+  description = "TGW attachment ID for the Direct Connect gateway, or null when no DX gateway is configured."
+  value       = try(module.dxgw[0].transit_gateway_attachment_id, null)
+}

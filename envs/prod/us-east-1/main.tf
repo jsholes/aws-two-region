@@ -1,17 +1,16 @@
 ############################################################
 # prod / us-east-1
 #
-# Address plan - 10.101.0.0/16, one /22 per VPC:
+# Address plan - one /22 per VPC, all derived from
+# var.region_supernet (see locals below):
 #
-#   10.101.0.0/22    inspection
-#   10.101.4.0/22    ingress landing zone
-#   10.101.8.0/22    spoke-01
-#   10.101.12.0/22   spoke-02
-#   10.101.16.0/22   spoke-03
-#   10.101.20.0/22   spoke-04
-#   10.101.24.0/22   spoke-05
-#   10.101.28.0/22   spoke-06
-#   10.101.32.0/19   free for growth
+#   slot 0   inspection
+#   slot 1   ingress landing zone
+#   slot 2+  spoke-01 .. spoke-NN
+#
+# With the default 10.100.0.0/16 that lands as 10.100.0.0/22,
+# 10.100.4.0/22, 10.100.8.0/22 and so on. Run
+# `terraform output vpc_cidr_plan` to see the resolved plan.
 #
 # This region inspects cross-region traffic, so it does not propagate
 # its prefixes into its own TGW peering route table - see the peering
@@ -26,13 +25,16 @@ locals {
     Component   = "network-platform"
   }, var.extra_tags)
 
+  # The whole address plan derives from var.region_supernet. A /16 split into
+  # /22s gives 64 VPC slots; slot 0 is inspection, slot 1 is ingress, and the
+  # spokes take slots 2 upward. Change the supernet and the entire region
+  # moves with it - nothing else in this file carries an address.
+  inspection_vpc_cidr = cidrsubnet(var.region_supernet, 6, 0)
+  ingress_vpc_cidr    = cidrsubnet(var.region_supernet, 6, 1)
+
   spoke_vpc_cidrs = {
-    "spoke-01" = "10.101.8.0/22"
-    "spoke-02" = "10.101.12.0/22"
-    "spoke-03" = "10.101.16.0/22"
-    "spoke-04" = "10.101.20.0/22"
-    "spoke-05" = "10.101.24.0/22"
-    "spoke-06" = "10.101.28.0/22"
+    for i in range(var.spoke_count) :
+    format("spoke-%02d", i + 1) => cidrsubnet(var.region_supernet, 6, 2 + i)
   }
 }
 
@@ -45,12 +47,15 @@ module "network" {
 
   region_supernet     = var.region_supernet
   remote_supernets    = var.remote_supernets
-  inspection_vpc_cidr = "10.101.0.0/22"
-  ingress_vpc_cidr    = "10.101.4.0/22"
+  inspection_vpc_cidr = local.inspection_vpc_cidr
+  ingress_vpc_cidr    = local.ingress_vpc_cidr
   spoke_vpc_cidrs     = local.spoke_vpc_cidrs
 
   # This region inspects cross-region flows.
   propagate_into_peering_route_table = false
+
+  dx_gateway_id       = var.dx_gateway_id
+  dx_allowed_prefixes = var.dx_allowed_prefixes
 
   log_archive_bucket_name = var.log_archive_bucket_name
 

@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS region for this root module."
   type        = string
-  default     = "us-east-2"
+  default     = "us-east-1"
 }
 
 variable "environment" {
@@ -13,31 +13,54 @@ variable "environment" {
 variable "name_prefix" {
   description = "Prefix for every resource in this region."
   type        = string
-  default     = "prod-use2"
+  default     = "prod-use1"
 }
 
 variable "availability_zones" {
   description = "AZs to build into, in order."
   type        = list(string)
-  default     = ["us-east-2a", "us-east-2b", "us-east-2c"]
+  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 variable "amazon_side_asn" {
   description = "Transit Gateway ASN for this region."
   type        = number
-  default     = 64513
+  default     = 64512
 }
 
 variable "region_supernet" {
   description = "Summary prefix for this region."
   type        = string
-  default     = "10.102.0.0/16"
+  default     = "10.100.0.0/16"
 }
 
 variable "remote_supernets" {
   description = "Supernets of the other regions, reachable over TGW peering."
   type        = list(string)
-  default     = ["10.101.0.0/16"]
+  default     = ["10.200.0.0/16"]
+}
+
+variable "spoke_count" {
+  description = "Number of spoke VPCs. Each takes the next /22 slot after inspection and ingress, so raising this adds spokes without touching any address."
+  type        = number
+  default     = 6
+
+  validation {
+    condition     = var.spoke_count >= 1 && var.spoke_count <= 62
+    error_message = "A /16 supernet carved into /22s leaves 62 slots after inspection and ingress."
+  }
+}
+
+variable "dx_gateway_id" {
+  description = "Direct Connect gateway to associate this region's TGW with. Empty disables the hybrid attachment."
+  type        = string
+  default     = ""
+}
+
+variable "dx_allowed_prefixes" {
+  description = "Prefixes advertised from AWS to on-premises. Empty uses this region's supernet."
+  type        = list(string)
+  default     = []
 }
 
 variable "log_archive_bucket_name" {

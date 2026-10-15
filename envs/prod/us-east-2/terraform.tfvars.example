@@ -1,0 +1,60 @@
+############################################################
+# prod / us-east-2
+#
+# Copy to terraform.tfvars (gitignored) and fill in.
+#
+# region_supernet drives the entire address plan: inspection takes the
+# first /22, ingress the second, spokes the rest. Set it to your real
+# supernet and every VPC moves with it - there is no other address to
+# change. Confirm with `terraform output vpc_cidr_plan` after apply,
+# or `terraform console` before it.
+############################################################
+
+region             = "us-east-2"
+name_prefix        = "prod-use2"
+availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
+amazon_side_asn    = 64513
+
+region_supernet  = "10.200.0.0/16"
+remote_supernets = ["10.100.0.0/16"]
+spoke_count      = 6
+
+# Hybrid connectivity. Leave empty for no Direct Connect. Both regions
+# associate with the same DX gateway; dx_allowed_prefixes defaults to this
+# region's supernet, which is the summarized advertisement you want.
+# dx_gateway_id       = "dxgw-xxxxxxxxxxxx"
+# dx_allowed_prefixes = ["10.200.0.0/16"]
+
+# Must be globally unique - append your account ID or org name.
+log_archive_bucket_name = "netplat-logs-CHANGEME-us-east-2"
+
+vmseries = {
+  panos_version    = "11.1.4"
+  license_type     = "byol"
+  instance_type    = "m5.xlarge"
+  min_size         = 1
+  max_size         = 4
+  desired_capacity = 2
+
+  # Restrict this to your management network before the first apply.
+  mgmt_allowed_cidrs = ["10.200.0.0/16"]
+
+  # Panorama registration. Supply vm_auth_key from a secret store,
+  # not from this file.
+  # panorama_server         = "10.200.x.x"
+  # panorama_template_stack = "aws-gwlb-stack"
+  # panorama_device_group   = "aws-use2"
+}
+
+# Example published service. targets are workload IPs in the spoke
+# VPCs, reached over the Transit Gateway.
+ingress_listeners = {
+  # https = {
+  #   port                  = 443
+  #   protocol              = "TCP"
+  #   target_port           = 443
+  #   target_protocol       = "TCP"
+  #   health_check_protocol = "TCP"
+  #   targets               = ["10.200.8.20", "10.200.9.20"]
+  # }
+}

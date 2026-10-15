@@ -14,11 +14,12 @@ Per region: 1 Transit Gateway, 6 spoke VPCs, 1 inspection VPC, 1 ingress VPC,
 ```
 bootstrap/                        S3 state buckets + DynamoDB lock tables
 docs/iam.md                       IAM roles and permissions reference
+docs/diagrams/                    editable .drawio architecture diagram + SVG
 docs/publishing.md                what stays private when this goes public
 scripts/audit-public.sh           pre-publish secret audit
 iam/                              ready-to-attach policy documents
-envs/prod/us-east-1/              root module - 10.101.0.0/16
-envs/prod/us-east-2/              root module - 10.102.0.0/16
+envs/prod/us-east-1/              root module - 10.100.0.0/16
+envs/prod/us-east-2/              root module - 10.200.0.0/16
 envs/prod/global-peering/         root module - cross-region TGW peering
 modules/
   region-stack/                   composes one complete region
@@ -28,6 +29,7 @@ modules/
   ingress-vpc/                    internet landing zone + NLB + IGW ingress routing
   gwlb/                           Gateway Load Balancer + GENEVE TG + endpoint service
   gwlb-endpoints/                 GWLB endpoints, one per AZ
+  dxgw-attachment/                Direct Connect gateway association and hybrid routing
   panw-vmseries-asg/              VM-Series ASGs, launch templates, bootstrap bucket
   log-archive/                    flow log + access log bucket
   tgw-peering/                    inter-region peering and its routes
@@ -38,27 +40,54 @@ The two region roots are thin: they set the address plan and call
 
 ---
 
+## Diagram
+
+`docs/diagrams/aws-network-platform.drawio` opens in [draw.io](https://app.diagrams.net),
+the desktop app, or the VS Code Draw.io Integration extension. Three pages:
+
+1. **Two-Region Overview** - both regions, TGW peering, the shared Direct
+   Connect gateway, and where the internet attaches.
+2. **Region Detail and Traffic Paths** - inspection and ingress VPC internals
+   with the ingress path numbered 1-5, plus the east-west, egress and hybrid
+   flows.
+3. **Transit Gateway Route Domains** - what is in each of the five route
+   tables and which attachment associates with it.
+
+`aws-network-platform.svg` is a flat render of the same three pages for
+viewing without draw.io. Both are generated from `scripts/gen-diagram.py`, so
+edit the script rather than the output if the topology changes - though
+hand-editing the .drawio is fine if you are done generating.
+
+---
+
 ## Address plan
 
-One `/22` per VPC, three AZs each.
+One `/22` per VPC, three AZs each. Every CIDR below is derived from
+`region_supernet` with `cidrsubnet(supernet, 6, slot)` - inspection is slot 0,
+ingress slot 1, spokes slot 2 upward. Point `region_supernet` at your own
+space and the whole region moves; nothing else carries an address.
+`terraform output vpc_cidr_plan` shows what a region resolved to.
+
+The supernets below are the shipped defaults, not a recommendation - pick
+your own.
 
 | VPC | us-east-1 | us-east-2 |
 |---|---|---|
-| inspection | 10.101.0.0/22 | 10.102.0.0/22 |
-| ingress | 10.101.4.0/22 | 10.102.4.0/22 |
-| spoke-01 | 10.101.8.0/22 | 10.102.8.0/22 |
-| spoke-02 | 10.101.12.0/22 | 10.102.12.0/22 |
-| spoke-03 | 10.101.16.0/22 | 10.102.16.0/22 |
-| spoke-04 | 10.101.20.0/22 | 10.102.20.0/22 |
-| spoke-05 | 10.101.24.0/22 | 10.102.24.0/22 |
-| spoke-06 | 10.101.28.0/22 | 10.102.28.0/22 |
-| free | 10.101.32.0/19 + | 10.102.32.0/19 + |
+| inspection | 10.100.0.0/22 | 10.200.0.0/22 |
+| ingress | 10.100.4.0/22 | 10.200.4.0/22 |
+| spoke-01 | 10.100.8.0/22 | 10.200.8.0/22 |
+| spoke-02 | 10.100.12.0/22 | 10.200.12.0/22 |
+| spoke-03 | 10.100.16.0/22 | 10.200.16.0/22 |
+| spoke-04 | 10.100.20.0/22 | 10.200.20.0/22 |
+| spoke-05 | 10.100.24.0/22 | 10.200.24.0/22 |
+| spoke-06 | 10.100.28.0/22 | 10.200.28.0/22 |
+| free | 10.100.32.0/19 + | 10.200.32.0/19 + |
 
 Each region summarizes to a single `/16`, so the TGW route tables and the
 firewall policy only ever need two supernets.
 
-Subnets are derived with `cidrsubnet()` inside the modules, so adding a spoke
-means adding one line to the region root's `spoke_vpc_cidrs` map.
+Subnets inside each VPC are derived the same way inside the modules. Adding a
+spoke means incrementing `spoke_count`; it takes the next free /22.
 
 **Spoke `/22`**
 
@@ -98,9 +127,10 @@ Default association and propagation are disabled. Four route tables:
 | Domain | Associated attachments | Contents |
 |---|---|---|
 | `spoke` | the 6 spoke VPCs | static `0.0.0.0/0` -> inspection attachment; ingress VPC prefix propagated |
-| `inspection` | inspection VPC | spoke + ingress prefixes propagated; remote supernet -> peering (inspecting region only) |
+| `inspection` | inspection VPC | spoke + ingress prefixes propagated; on-premises prefixes propagated; remote supernet -> peering (inspecting region only) |
 | `ingress` | ingress VPC | spoke prefixes propagated; static `0.0.0.0/0` -> inspection attachment |
 | `peering` | TGW peering attachment | see cross-region below |
+| `hybrid` | Direct Connect gateway attachment | static local supernet -> inspection attachment |
 
 Two things carry the whole design:
 
@@ -128,7 +158,7 @@ spoke A workload
   -> TGW spoke RT 0.0.0.0/0 -> inspection attachment
   -> inspection VPC tgw subnet, RT 0.0.0.0/0 -> AZ-local GWLB endpoint
   -> GWLB -> VM-Series (GENEVE 6081) -> GWLB
-  -> gwlbe subnet RT 10.101.0.0/16 -> TGW
+  -> gwlbe subnet RT 10.100.0.0/16 -> TGW
   -> TGW inspection RT (propagated spoke prefix)
   -> spoke B workload
 ```
@@ -140,7 +170,7 @@ client -> IGW (ingress VPC)
   -> IGW ingress RT: NLB subnet prefix -> AZ-local GWLB endpoint
   -> GWLB -> VM-Series -> GWLB
   -> gwlbe subnet, NLB reached over the VPC local route
-  -> NLB -> target IP in a spoke, public RT 10.101.0.0/16 -> TGW
+  -> NLB -> target IP in a spoke, public RT 10.100.0.0/16 -> TGW
   -> TGW ingress RT (propagated spoke prefix) -> spoke workload
 
 return: spoke -> TGW spoke RT (ingress prefix, propagated) -> ingress VPC
@@ -158,7 +188,7 @@ NLB node and follows the propagated ingress prefix.
 spoke -> TGW -> inspection VPC tgw subnet -> GWLB endpoint -> VM-Series
       -> gwlbe RT 0.0.0.0/0 -> NAT gateway -> IGW
 
-return: IGW -> NAT -> public RT 10.101.0.0/16 -> GWLB endpoint -> VM-Series
+return: IGW -> NAT -> public RT 10.100.0.0/16 -> GWLB endpoint -> VM-Series
         -> gwlbe RT -> TGW -> spoke
 ```
 
@@ -169,9 +199,9 @@ firewall:
 
 ```
 us-east-1 (inspecting)          us-east-2 (bypass)
-  spoke RT   10.102/16 -> insp    spoke RT   10.101/16 -> peering
-  insp RT    10.102/16 -> peering peering RT local prefixes propagated
-  peering RT 10.101/16 -> insp
+  spoke RT   10.200/16 -> insp    spoke RT   10.100/16 -> peering
+  insp RT    10.200/16 -> peering peering RT local prefixes propagated
+  peering RT 10.100/16 -> insp
 ```
 
 `var.inspection_side` in `envs/prod/global-peering` and
@@ -180,6 +210,35 @@ same decision and must agree: the inspecting region sets propagation to
 `false`. If it propagated its spoke prefixes into its own peering table, those
 more specific routes would win over the static route to the firewall and
 cross-region traffic would silently skip inspection.
+
+**Hybrid / Direct Connect**
+
+Optional, off by default. Set `dx_gateway_id` in a region root and that
+region's TGW associates with the Direct Connect gateway; both regions
+associate with the same one.
+
+The two directions are not symmetric, which is where hybrid routing usually
+goes wrong:
+
+- **on-premises to AWS** is real BGP propagation. Routes learned from the
+  customer router land in the TGW route tables you propagate the DX
+  attachment into - here, `inspection` only.
+- **AWS to on-premises** is not propagation at all. `allowed_prefixes` on the
+  association is a static list, so it gets the summarized region supernet
+  rather than eight /22s. AWS caps it at 200 prefixes per association.
+
+The DX attachment lives in its own `hybrid` domain carrying one static route,
+local supernet -> inspection attachment. The spoke table gets nothing: its
+`0.0.0.0/0` already points at the firewall, and propagating on-premises
+prefixes there would be more specific than that default and would send spoke
+to on-premises traffic straight out the Direct Connect without inspection.
+Same failure mode as propagating into the inspecting region's peering table.
+
+Worth knowing before wiring it up: a DX gateway associates with at most 6
+transit gateways, cannot hold virtual private gateway and transit gateway
+associations at the same time, and requires a transit VIF rather than a
+private one. Connecting one DX gateway to TGWs in different Regions requires
+distinct ASNs, which the shipped 64512 / 64513 already satisfies.
 
 ---
 

@@ -1,5 +1,13 @@
 ############################################################
 # prod / us-east-1
+#
+# Copy to terraform.tfvars (gitignored) and fill in.
+#
+# region_supernet drives the entire address plan: inspection takes the
+# first /22, ingress the second, spokes the rest. Set it to your real
+# supernet and every VPC moves with it - there is no other address to
+# change. Confirm with `terraform output vpc_cidr_plan` after apply,
+# or `terraform console` before it.
 ############################################################
 
 region             = "us-east-1"
@@ -7,8 +15,15 @@ name_prefix        = "prod-use1"
 availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
 amazon_side_asn    = 64512
 
-region_supernet  = "10.101.0.0/16"
-remote_supernets = ["10.102.0.0/16"]
+region_supernet  = "10.100.0.0/16"
+remote_supernets = ["10.200.0.0/16"]
+spoke_count      = 6
+
+# Hybrid connectivity. Leave empty for no Direct Connect. Both regions
+# associate with the same DX gateway; dx_allowed_prefixes defaults to this
+# region's supernet, which is the summarized advertisement you want.
+# dx_gateway_id       = "dxgw-xxxxxxxxxxxx"
+# dx_allowed_prefixes = ["10.100.0.0/16"]
 
 # Must be globally unique - append your account ID or org name.
 log_archive_bucket_name = "netplat-logs-CHANGEME-us-east-1"
@@ -22,11 +37,11 @@ vmseries = {
   desired_capacity = 2
 
   # Restrict this to your management network before the first apply.
-  mgmt_allowed_cidrs = ["10.101.0.0/16"]
+  mgmt_allowed_cidrs = ["10.100.0.0/16"]
 
   # Panorama registration. Supply vm_auth_key from a secret store,
   # not from this file.
-  # panorama_server         = "10.101.x.x"
+  # panorama_server         = "10.100.x.x"
   # panorama_template_stack = "aws-gwlb-stack"
   # panorama_device_group   = "aws-use1"
 }
@@ -40,6 +55,6 @@ ingress_listeners = {
   #   target_port           = 443
   #   target_protocol       = "TCP"
   #   health_check_protocol = "TCP"
-  #   targets               = ["10.101.8.20", "10.101.9.20"]
+  #   targets               = ["10.100.8.20", "10.100.9.20"]
   # }
 }

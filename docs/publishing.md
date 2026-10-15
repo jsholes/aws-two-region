@@ -51,6 +51,20 @@ The audit covers six things:
 5. The same patterns anywhere in **commit history**.
 6. `gitleaks`, if installed, with the repo's `.gitleaks.toml`.
 
+### Untrack before you squash
+
+`git checkout --orphan` keeps the index, and `.gitignore` never applies to a
+file that is already tracked. So if `terraform.tfvars` or `backend.hcl` were
+committed at any point, `git add -A` on the orphan branch happily re-commits
+them. Untrack them first - this leaves the files on disk:
+
+```bash
+git rm --cached envs/prod/*/terraform.tfvars envs/prod/*/backend.hcl
+git commit --amend --no-edit     # if they landed in the last commit
+```
+
+The audit's first check catches exactly this case.
+
 ### History is the part people get wrong
 
 `.gitignore` has no effect on what is already committed. A secret added in
@@ -110,13 +124,15 @@ jobs:
 
 ## Judgment calls the script cannot make for you
 
-**Your address plan.** `10.101.0.0/16` and `10.102.0.0/16` are in the README,
-the module defaults and the examples. RFC1918 space is not a credential, but
-it is a map of your network, and combined with a public repo it tells a
-reader how your environment is laid out. If that bothers you, sed the
-examples to `10.0.0.0/16` / `10.1.0.0/16` before publishing and keep the real
-plan in your private `terraform.tfvars`. Nothing in the modules depends on
-the specific numbers.
+**Your address plan.** This is handled structurally now: the committed
+defaults are `10.100.0.0/16` and `10.200.0.0/16`, placeholders that appear
+nowhere real, and the entire per-VPC plan derives from `region_supernet`. Your
+actual space lives in the gitignored `terraform.tfvars` as one line per
+region. Nothing in the modules or the README encodes a real address, so there
+is no sanitizing pass to remember before a push.
+
+If you ever hardcode a CIDR back into a region root's `main.tf`, you have
+undone that - keep addresses in tfvars.
 
 **Spoke names.** `spoke-01` through `spoke-06` reveal nothing. If you rename
 them after what they host, that naming is now public. Keep business-meaningful

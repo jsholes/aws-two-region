@@ -13,6 +13,17 @@ output "inspection_attachment_id" {
   value       = module.network.inspection_attachment_id
 }
 
+output "vpc_cidr_plan" {
+  description = "Resolved address plan for this region - the CIDR actually assigned to every VPC."
+  value = merge(
+    {
+      inspection = local.inspection_vpc_cidr
+      ingress    = local.ingress_vpc_cidr
+    },
+    local.spoke_vpc_cidrs,
+  )
+}
+
 output "region_supernet" {
   description = "Summary prefix for this region."
   value       = var.region_supernet
@@ -46,4 +57,9 @@ output "vmseries_bootstrap_bucket" {
 output "log_archive_bucket_name" {
   description = "Log archive bucket."
   value       = module.network.log_archive_bucket_name
+}
+
+output "dx_gateway_attachment_id" {
+  description = "TGW attachment ID for the Direct Connect gateway, null when DX is not configured."
+  value       = module.network.dx_gateway_attachment_id
 }
